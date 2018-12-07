@@ -86,5 +86,12 @@ fn ay_word(word: &str) -> String {
 }
 
 fn ay_combine(front: &str, ay: &str) -> String {
-    format!("{}-{}", front, ay)
+    let mut list = Vec::new();
+    if !front.is_empty() {
+        list.push(front);
+    }
+    if !ay.is_empty() {
+        list.push(ay);
+    }
+    list.join("-")
 }
