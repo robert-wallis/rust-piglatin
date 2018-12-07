@@ -36,12 +36,12 @@ fn ay_line(line: &str) {
         println!();
         return;
     }
-    let words = line
+    let converted = line
         .split_whitespace()
         .map(ay_word)
         .collect::<Vec<String>>()
         .join(" ");
-    println!("{}", words);
+    println!("{}", converted);
 }
 
 fn ay_word(word: &str) -> String {
