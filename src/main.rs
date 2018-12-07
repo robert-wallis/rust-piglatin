@@ -45,5 +45,29 @@ fn ay_line(line: &str) {
 }
 
 fn ay_word(word: &str) -> String {
-    format!("{}-ay", word)
+    let chars = word.chars().collect::<Vec<char>>();
+    let mut front = String::new();
+    if chars.is_empty() {
+        return front;
+    }
+    match chars[0] {
+        'a' | 'A' | 'e' | 'E' | 'i' | 'I' | 'o' | 'O' | 'u' | 'U' | 'y' | 'Y' => {
+            ay_combine(word, "hay")
+        },
+        _ => {
+            for c in chars.iter().skip(1) {
+                front.push(*c);
+            }
+            let ay = format!("{}{}", chars[0], "ay");
+            ay_combine(&front, &ay)
+        }
+    }
+}
+
+fn ay_combine(front: &str, ay: &str) -> String {
+    let mut word = String::new();
+    word.push_str(front);
+    word.push('-');
+    word.push_str(ay);
+    word
 }
