@@ -36,9 +36,24 @@ fn ay_line(line: &str) {
         println!();
         return;
     }
-    let converted = line
-        .split_whitespace()
-        .map(ay_word)
+    let mut words:Vec<&str> = vec![];
+    let mut start = 0;
+    for (i, c) in line.char_indices() {
+        if !c.is_alphabetic() {
+            if start != i {
+                words.push(&line[start..i]);
+            }
+            if !c.is_whitespace() {
+                words.push(&line[i..i+1]);
+            }
+            start = i+1;
+        }
+    }
+    println!("mid:{:#?}", words);
+    let converted =
+        words
+        .iter()
+        .map(|w| ay_word(w))
         .collect::<Vec<String>>()
         .join(" ");
     println!("{}", converted);
@@ -50,38 +65,25 @@ fn ay_word(word: &str) -> String {
     if chars.is_empty() {
         return front;
     }
-    match chars[0] {
+    let first_letter = chars[0];
+    match first_letter {
         'a' | 'A' | 'e' | 'E' | 'i' | 'I' | 'o' | 'O' | 'u' | 'U' | 'y' | 'Y' => {
             ay_combine(word, "hay")
         },
         _ => {
-            for c in chars.iter().skip(1) {
-                front.push(*c);
+            if !first_letter.is_alphabetic() {
+                String::from(word)
+            } else {
+                for c in chars.iter().skip(1) {
+                    front.push(*c);
+                }
+                let ay = format!("{}{}", first_letter, "ay");
+                ay_combine(&front, &ay)
             }
-            let ay = format!("{}{}", chars[0], "ay");
-            ay_combine(&front, &ay)
         }
     }
 }
 
 fn ay_combine(front: &str, ay: &str) -> String {
-    let mut word = String::new();
-    let mut last = String::new();
-    let last_char = if let Some(c) = front.chars().last() {
-        c
-    } else {
-        return word;
-    };
-    if last_char.is_alphabetic() {
-        word.push_str(front);
-    } else  {
-        last.push(last_char);
-        let count = front.chars().count();
-        let beginning:String = front.chars().take(count-1).collect();
-        word.push_str(&beginning);
-    }
-    word.push('-');
-    word.push_str(ay);
-    word.push_str(&last);
-    word
+    format!("{}-{}", front, ay)
 }
