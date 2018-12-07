@@ -36,6 +36,16 @@ fn ay_line(line: &str) {
         println!();
         return;
     }
+    let converted =
+        tokenize(line)
+        .iter()
+        .map(|w| ay_word(w))
+        .collect::<Vec<String>>()
+        .join("");
+    println!("{}", converted);
+}
+
+fn tokenize(line: &str) -> Vec<&str> {
     let mut words:Vec<&str> = vec![];
     let mut start = 0;
     for (i, c) in line.char_indices() {
@@ -43,20 +53,11 @@ fn ay_line(line: &str) {
             if start != i {
                 words.push(&line[start..i]);
             }
-            if !c.is_whitespace() {
-                words.push(&line[i..i+1]);
-            }
+            words.push(&line[i..=i]);
             start = i+1;
         }
     }
-    println!("mid:{:#?}", words);
-    let converted =
-        words
-        .iter()
-        .map(|w| ay_word(w))
-        .collect::<Vec<String>>()
-        .join(" ");
-    println!("{}", converted);
+    words
 }
 
 fn ay_word(word: &str) -> String {
