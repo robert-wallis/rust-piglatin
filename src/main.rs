@@ -66,8 +66,22 @@ fn ay_word(word: &str) -> String {
 
 fn ay_combine(front: &str, ay: &str) -> String {
     let mut word = String::new();
-    word.push_str(front);
+    let mut last = String::new();
+    let last_char = if let Some(c) = front.chars().last() {
+        c
+    } else {
+        return word;
+    };
+    if last_char.is_alphabetic() {
+        word.push_str(front);
+    } else  {
+        last.push(last_char);
+        let count = front.chars().count();
+        let beginning:String = front.chars().take(count-1).collect();
+        word.push_str(&beginning);
+    }
     word.push('-');
     word.push_str(ay);
+    word.push_str(&last);
     word
 }
