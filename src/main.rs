@@ -57,6 +57,9 @@ fn tokenize(line: &str) -> Vec<&str> {
             start = i+1;
         }
     }
+    if start < line.len() {
+        words.push(&line[start..]);
+    }
     words
 }
 
